@@ -13,8 +13,3 @@ environments:
       - ./vars/dev-values.yaml
       - ./vars/aws-small-values.yaml
       - awsenv.enabled: true
-  # stage:
-  # aws-small:
-  # aws-medium:
-  # aws-large:
-  # aws-local:

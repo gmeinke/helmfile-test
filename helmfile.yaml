@@ -12,7 +12,7 @@ bases:
   - ./environments/environments.yaml
 
 releases:
-  - name: idp-prom
+  - name: greg-prom
     chart: prometheus-community/kube-prometheus-stack 
     version: 46.4.2
     namespace: monitoring
@@ -25,7 +25,7 @@ releases:
     chart: ingress-nginx/ingress-nginx
     version: 4.7.0
     needs:
-      - monitoring/idp-prom
+      - monitoring/greg-prom
     cleanupOnFail: false
     devel: false
     skipDeps: false
@@ -35,27 +35,27 @@ releases:
       - name: controller.metrics.ServiceMonitor.enabled
         value: true
       - name: controller.metrics.ServiceMonitor.additionalLabels.release
-        value: idp-prom
+        value: greg-prom
       - name: controller.kind
         value: DaemonSet
-  # - name: elasticsearch
-  #   chart: elastic/elasticsearch
-  #   version: 7.17.3
-  #   namespace: infra
-  #   cleanupOnFail: false
-  #   devel: false
-  #   skipDeps: false
-  #   set:
-  #     - name: antiAffinity
-  #       value: soft
-  #   needs:
-  #     - monitoring/idp-prom
-  # - name: kibana
-  #   chart: elastic/kibana
-  #   version: 7.17.3
-  #   namespace: infra
-  #   needs:
-  #     - elasticsearch
-  #   cleanupOnFail: false
-  #   devel: false
-  #   skipDeps: false
+  - name: elasticsearch
+    chart: elastic/elasticsearch
+    version: 7.17.3
+    namespace: infra
+    cleanupOnFail: false
+    devel: false
+    skipDeps: false
+    set:
+      - name: antiAffinity
+        value: soft
+    needs:
+      - monitoring/greg-prom
+  - name: kibana
+    chart: elastic/kibana
+    version: 7.17.3
+    namespace: infra
+    needs:
+      - elasticsearch
+    cleanupOnFail: false
+    devel: false
+    skipDeps: false
