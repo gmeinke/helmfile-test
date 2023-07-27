@@ -1,0 +1,4 @@
+clusterEnv: ""
+storageClass: "local-path"
+prometheusStorageSize: "7Gi"
+alertMgrStorageSize: "4Gi"

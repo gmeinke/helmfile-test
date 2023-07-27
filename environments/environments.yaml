@@ -1,0 +1,20 @@
+environments: 
+  default:
+    values:
+      - ./vars/default-values.yaml
+      - awsenv.enabled: false
+  greg:
+    values:
+      - ./vars/default-values.yaml
+      - clusterEnv: greg-local
+      - awsenv.enabled: false
+  dev:
+    values:
+      - ./vars/dev-values.yaml
+      - ./vars/aws-small-values.yaml
+      - awsenv.enabled: true
+  # stage:
+  # aws-small:
+  # aws-medium:
+  # aws-large:
+  # aws-local:

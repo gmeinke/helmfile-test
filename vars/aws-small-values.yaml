@@ -1,0 +1,3 @@
+storageClass: "ebs-storageclass"
+prometheusStorageSize: "7Gi"
+alertMgrStorageSize: "4Gi"

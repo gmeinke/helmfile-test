@@ -1,0 +1,61 @@
+repositories:
+  - name: stable
+    url: https://charts.helm.sh/stable
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: elastic
+    url: https://helm.elastic.co
+
+bases:
+  - ./environments/environments.yaml
+
+releases:
+  - name: idp-prom
+    chart: prometheus-community/kube-prometheus-stack 
+    version: 46.4.2
+    namespace: monitoring
+    values:
+      - ./values/prometheus-values.yaml.gotmpl
+    cleanupOnFail: false
+    devel: false
+    skipDeps: false
+  - name: nginx
+    chart: ingress-nginx/ingress-nginx
+    version: 4.7.0
+    needs:
+      - monitoring/idp-prom
+    cleanupOnFail: false
+    devel: false
+    skipDeps: false
+    set:
+      - name: controller.metrics.enabled
+        value: true
+      - name: controller.metrics.ServiceMonitor.enabled
+        value: true
+      - name: controller.metrics.ServiceMonitor.additionalLabels.release
+        value: idp-prom
+      - name: controller.kind
+        value: DaemonSet
+  # - name: elasticsearch
+  #   chart: elastic/elasticsearch
+  #   version: 7.17.3
+  #   namespace: infra
+  #   cleanupOnFail: false
+  #   devel: false
+  #   skipDeps: false
+  #   set:
+  #     - name: antiAffinity
+  #       value: soft
+  #   needs:
+  #     - monitoring/idp-prom
+  # - name: kibana
+  #   chart: elastic/kibana
+  #   version: 7.17.3
+  #   namespace: infra
+  #   needs:
+  #     - elasticsearch
+  #   cleanupOnFail: false
+  #   devel: false
+  #   skipDeps: false
